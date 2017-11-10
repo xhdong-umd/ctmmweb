@@ -1,0 +1,22 @@
+---
+title: "now"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(devtools)
+```
+
+## intro
+- still need a place to hold notes, scripts that should reside here instead of ctmm-shiny project.
+- ignore this folder in rbuildignore
+- [main reference](http://r-pkgs.had.co.nz/package.html)
+
+
+### organization
+
+```{r rbuildignore}
+use_build_ignore("note")
+```
+
