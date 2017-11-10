@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Xianghui Dong
 Maintainer: Xianghui Dong <xhdong@umd.edu>
 Description: Shiny app for ctmm, and various utility functions can be used 
-    individually
+    individually.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
