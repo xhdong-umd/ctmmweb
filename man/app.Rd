@@ -4,7 +4,10 @@
 \alias{app}
 \title{Start ctmm web app}
 \usage{
-app()
+app(data = NULL)
+}
+\arguments{
+\item{data}{Data to be loaded with app. Could be path to csv file, .rds file; \code{ctmm} telemetry object/list. Default \code{NULL} will not load any data.}
 }
 \description{
 Start ctmm web app
