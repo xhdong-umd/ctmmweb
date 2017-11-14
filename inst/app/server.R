@@ -194,14 +194,14 @@ output:
   }
   # 1.1 csv to telemetry ----
   # call this function for side effect, set values$data
-  data_import <- function(data) {
+  data_import <- function(data_path) {
     # sometimes there is error: Error in <Anonymous>: unable to find an inherited method for function ‘span’ for signature ‘"shiny.tag"’. added tags$, not sure if it will fix it.
     note_import <- showNotification(
       shiny::span(icon("spinner fa-spin"), "Importing data..."),
       type = "message", duration = NULL)
     on.exit(removeNotification(note_import))
     # wrap it so even single individual will return a list with one item
-    tele_list <- tryCatch(wrap_single_telemetry(as.telemetry(data)),
+    tele_list <- tryCatch(wrap_single_telemetry(as.telemetry(data_path)),
         error = function(e) {
           showNotification("Import error, check data again",
                            duration = 4, type = "error")
