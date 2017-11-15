@@ -194,7 +194,7 @@ output:
   }
   # 1.1 csv to telemetry ----
   # call this function for side effect, set values$data
-  data_import <- function(data_path) {
+  import_file <- function(data_path) {
     # sometimes there is error: Error in <Anonymous>: unable to find an inherited method for function ‘span’ for signature ‘"shiny.tag"’. added tags$, not sure if it will fix it.
     note_import <- showNotification(
       shiny::span(icon("spinner fa-spin"), "Importing data..."),
@@ -214,8 +214,9 @@ output:
     update_input_data(tele_list)
   }
   # clicking browse button without changing radio button should also update, this is why we make the function to include all behavior after file upload.
-  file_uploaded <- function(){
-    data_import(input$tele_file$datapath)
+  # using parameter because launching app with path also use this function
+  file_uploaded <- function(data_path){
+    import_file(data_path)
     updateRadioButtons(session, "load_option", selected = "upload")
     updateTabItems(session, "tabs", "plots")
   }
@@ -224,7 +225,7 @@ output:
     # LOG file upload.
     log_msg("Importing file", input$tele_file$name,
             on = isolate(input$record_on))
-    file_uploaded()
+    file_uploaded(input$tele_file$datapath)
   })
   # abstract because need to do this in 2 places
   set_sample_data <- function() {
@@ -258,7 +259,7 @@ output:
              # this doesn't do anything by itself so no log msg
              # need to check NULL input from source, stop error in downstream
              req(input$tele_file)
-             file_uploaded()
+             file_uploaded(input$tele_file$datapath)
            })
   })
   # also update the app when sample size changed and is already in sample mode

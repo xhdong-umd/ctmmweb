@@ -20,9 +20,10 @@ app <- function(data = NULL) {
   }
   # previous_wd <- getwd()
   # setwd(appDir)
-  source(file.path(appDir, "global.R"), chdir = TRUE)
-  source(file.path(appDir, "server.R"), local = TRUE, chdir = TRUE)
+  # evaluate them inside function environment, also change working directory temporarily
+  source(file.path(appDir, "global.R"), local = TRUE, chdir = TRUE)
   source(file.path(appDir, "ui.R"), local = TRUE, chdir = TRUE)
+  source(file.path(appDir, "server.R"), local = TRUE, chdir = TRUE)
   # setwd(previous_wd)
   shiny_app <- shiny::shinyApp(ui = ui, server = server)
   shiny::runApp(shiny_app, display.mode = "normal")
