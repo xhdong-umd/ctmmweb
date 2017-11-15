@@ -220,6 +220,28 @@ output:
     updateRadioButtons(session, "load_option", selected = "upload")
     updateTabItems(session, "tabs", "plots")
   }
+  # data from app() ----
+  # app can work without data parameter, or launched with data parameter, so need to check if data parameter exist first.
+  # checking the parent environment, which is the app() environment so there will not be naming conflict from user environment.
+  if (exists("shiny_app_data", where = parent.env(environment()))) {
+    # should ensure no naming conflict possible
+    app_input_data <- get("shiny_app_data", envir = parent.env(environment()))
+    if ("telemetry" %in% class(app_input_data)) {  # make less conditions
+      app_input_data <- wrap_single_telemetry(app_input_data)
+    }
+    if (is.character(app_input_data)) {
+      data_path <- app_input_data
+      # LOG file loaded from app()
+      log_msg("Importing file from app(shiny_app_data)", data_path,
+              on = isolate(input$record_on))
+      # accessed reactive values so need to isolate
+      isolate(file_uploaded(data_path))
+    } else if (is.list(shiny_app_data) &&
+               "telemetry" %in% class(shiny_app_data[[1]])) {
+
+    }
+  }
+  # upload dialog
   observeEvent(input$tele_file, {
     req(input$tele_file)
     # LOG file upload.
@@ -256,9 +278,12 @@ output:
              set_sample_data()
            },
            upload = {
-             # this doesn't do anything by itself so no log msg
+             # the radiobutton itself doesn't upload, just reuse previously uploaded file if switched back.
              # need to check NULL input from source, stop error in downstream
              req(input$tele_file)
+             # LOG file upload.
+             log_msg("Importing file", input$tele_file$name,
+                     on = isolate(input$record_on))
              file_uploaded(input$tele_file$datapath)
            })
   })

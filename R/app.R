@@ -13,13 +13,14 @@
 #   shiny::runApp(appDir, display.mode = "normal")
 # }
 
-app <- function(data = NULL) {
+app <- function(shiny_app_data = NULL) {
   appDir <- system.file("app", package = "ctmmweb")
   if (appDir == "") {
     stop("Could not find app directory. Try re-installing `ctmmweb`.", call. = FALSE)
   }
   # previous_wd <- getwd()
   # setwd(appDir)
+  # print(exists("shiny_app_data"))
   # evaluate them inside function environment, also change working directory temporarily
   source(file.path(appDir, "global.R"), local = TRUE, chdir = TRUE)
   source(file.path(appDir, "ui.R"), local = TRUE, chdir = TRUE)
