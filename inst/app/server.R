@@ -222,13 +222,10 @@ output:
   }
   # data from app() ----
   # app can work without data parameter, or launched with data parameter, so need to check if data parameter exist first.
-  # checking the parent environment, which is the app() environment so there will not be naming conflict from user environment.
+  # checking the parent environment, which is the app() environment so there will not be naming conflict from user environment. if parameter is NULL, no condition will match and nothing is done
   if (exists("shiny_app_data", where = parent.env(environment()))) {
     # ensure no naming conflict possible
     app_input_data <- get("shiny_app_data", envir = parent.env(environment()))
-    # if ("telemetry" %in% class(app_input_data)) {  # make less conditions
-    #   app_input_data <- wrap_single_telemetry(app_input_data)
-    # }
     if (is.character(app_input_data)) {
       # LOG file loaded from app()
       log_msg("Importing file from app(shiny_app_data)", app_input_data,

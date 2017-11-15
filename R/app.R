@@ -1,6 +1,6 @@
 #' Start ctmm web app
 #'
-#' @param data Data to be loaded with app. Could be path to csv file, .rds file; `ctmm` telemetry object/list. Default `NULL` will not load any data.
+#' @param data Data to be loaded with app. Could be path to csv file, `ctmm` telemetry object/list. Default `NULL` will not load any data.
 #'
 #' @export
 #' @import data.table
@@ -18,14 +18,10 @@ app <- function(shiny_app_data = NULL) {
   if (appDir == "") {
     stop("Could not find app directory. Try re-installing `ctmmweb`.", call. = FALSE)
   }
-  # previous_wd <- getwd()
-  # setwd(appDir)
-  # print(exists("shiny_app_data"))
   # evaluate them inside function environment, also change working directory temporarily
   source(file.path(appDir, "global.R"), local = TRUE, chdir = TRUE)
   source(file.path(appDir, "ui.R"), local = TRUE, chdir = TRUE)
   source(file.path(appDir, "server.R"), local = TRUE, chdir = TRUE)
-  # setwd(previous_wd)
   shiny_app <- shiny::shinyApp(ui = ui, server = server)
   shiny::runApp(shiny_app, display.mode = "normal")
 }
