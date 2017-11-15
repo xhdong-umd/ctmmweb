@@ -224,21 +224,25 @@ output:
   # app can work without data parameter, or launched with data parameter, so need to check if data parameter exist first.
   # checking the parent environment, which is the app() environment so there will not be naming conflict from user environment.
   if (exists("shiny_app_data", where = parent.env(environment()))) {
-    # should ensure no naming conflict possible
+    # ensure no naming conflict possible
     app_input_data <- get("shiny_app_data", envir = parent.env(environment()))
-    if ("telemetry" %in% class(app_input_data)) {  # make less conditions
-      app_input_data <- wrap_single_telemetry(app_input_data)
-    }
+    # if ("telemetry" %in% class(app_input_data)) {  # make less conditions
+    #   app_input_data <- wrap_single_telemetry(app_input_data)
+    # }
     if (is.character(app_input_data)) {
-      data_path <- app_input_data
       # LOG file loaded from app()
-      log_msg("Importing file from app(shiny_app_data)", data_path,
+      log_msg("Importing file from app(shiny_app_data)", app_input_data,
               on = isolate(input$record_on))
       # accessed reactive values so need to isolate
-      isolate(file_uploaded(data_path))
-    } else if (is.list(shiny_app_data) &&
-               "telemetry" %in% class(shiny_app_data[[1]])) {
-
+      isolate(file_uploaded(app_input_data))
+    } else if (("telemetry" %in% class(app_input_data)) ||
+               (is.list(shiny_app_data) &&
+                "telemetry" %in% class(shiny_app_data[[1]]))
+              ) {
+      # LOG data loaded from app()
+      log_msg("Loading telemetry data from app(shiny_app_data)",
+              on = isolate(input$record_on))
+      isolate(update_input_data(app_input_data))
     }
   }
   # upload dialog
